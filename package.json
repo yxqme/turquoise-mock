@@ -6,6 +6,9 @@
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "bin": {
+    "mock": "dist/index.js"
+  },
   "files": [
     "dist"
   ],
