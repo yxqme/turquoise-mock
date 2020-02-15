@@ -1,6 +1,6 @@
 {
   "name": "@beacon/mock",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "author": "xiaoqiang.yang",
   "module": "dist/mock.esm.js",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "build": "tsdx build && cp -r src/public dist/public",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build",
+    "prepare": "tsdx build && cp -r src/public dist/public",
     "mock": "node ./dist/index.js"
   },
   "peerDependencies": {},

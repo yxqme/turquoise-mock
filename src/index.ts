@@ -69,16 +69,17 @@ export default function boot() {
 
 const watcher = chokidar.watch(only);
 
-watcher.on('ready', function() {
-  watcher.on('all', function() {
-    Object.keys(require.cache).forEach(function(id) {
-      if (/[\/\\]mock[\/\\]/.test(id)) delete require.cache[id];
-    });
-
-    if (server) {
-      server.close();
+watcher.on('change', path => {
+  Object.keys(require.cache).forEach(function(id) {
+    if (path === id) {
+      delete require.cache[id];
     }
-
-    boot();
   });
+  if (server) {
+    server.close(() => {
+      boot();
+    });
+  }
 });
+
+boot();
