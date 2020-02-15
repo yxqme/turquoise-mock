@@ -2,9 +2,12 @@
 
 import jsonServer from 'json-server';
 import Mock from 'mockjs';
+import { Server } from 'http';
 import { Request, Response } from 'express';
+import chokidar from 'chokidar';
 
 import {
+  only,
   getUserConfig,
   loadDBSchemas,
   loadRoutes,
@@ -18,8 +21,10 @@ interface Router {
   controller: (req: Request, res: Response) => void;
 }
 
+let server: Server;
+
 // 启动服务
-export default async function start(): Promise<void> {
+export default function boot() {
   const userConfig = getUserConfig();
 
   const [DBSchemas, routes, randomExtend, middlewares] = [
@@ -33,33 +38,47 @@ export default async function start(): Promise<void> {
     (Mock.Random as any).extend(randomExtend);
   }
 
-  const server = jsonServer.create();
+  const app = jsonServer.create();
   const router: any = jsonServer.router(Mock.mock(DBSchemas));
   const jsonServerMiddlewares = jsonServer.defaults({
     static: __dirname + '/public',
   });
 
-  server.use(jsonServerMiddlewares);
-  server.use(jsonServer.rewriter(userConfig.rewriter));
-  server.use(jsonServer.bodyParser);
+  app.use(jsonServerMiddlewares);
+  app.use(jsonServer.rewriter(userConfig.rewriter));
+  app.use(jsonServer.bodyParser);
 
-  middlewares.forEach((middleware: any): void => {
-    server.use(middleware);
+  middlewares.forEach((middleware: any) => {
+    app.use(middleware);
   });
 
-  routes.forEach((router: Router): void => {
-    server[router.method || 'get'](router.path, router.controller);
+  routes.forEach((router: Router) => {
+    app[router.method || 'get'](router.path, router.controller);
   });
 
   if (userConfig.render) {
     router.render = userConfig.render;
   }
 
-  server.use(router);
+  app.use(router);
 
-  server.listen(userConfig.port, (): void => {
+  server = app.listen(userConfig.port, () => {
     console.log('Mock Server is running, port: ' + userConfig.port);
   });
 }
 
-start();
+const watcher = chokidar.watch(only);
+
+watcher.on('ready', function() {
+  watcher.on('all', function() {
+    Object.keys(require.cache).forEach(function(id) {
+      if (/[\/\\]mock[\/\\]/.test(id)) delete require.cache[id];
+    });
+
+    if (server) {
+      server.close();
+    }
+
+    boot();
+  });
+});

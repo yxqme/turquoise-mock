@@ -4,8 +4,11 @@ import slash from 'slash';
 import glob from 'glob';
 import { Request, Response } from 'express';
 
-const cwd = process.cwd();
-const CONFIG_FILES = ['.mockrc.js', '.mockrc.ts'];
+export const cwd = process.cwd();
+export const CONFIG_FILES = ['.mockrc.js', '.mockrc.ts'];
+export const only = [...CONFIG_FILES, 'mock/**'].map(file =>
+  slash(join(cwd, file))
+);
 
 require('@babel/register')({
   presets: [
@@ -20,7 +23,7 @@ require('@babel/register')({
     ],
   ],
   extensions: ['.js', '.ts'],
-  only: [...CONFIG_FILES, 'mock/**'].map(file => slash(join(cwd, file))),
+  only,
   babelrc: false,
   cache: false,
 });
