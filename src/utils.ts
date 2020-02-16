@@ -6,7 +6,7 @@ import { Request, Response } from 'express';
 
 export const cwd = process.cwd();
 export const CONFIG_FILES = ['.mockrc.js', '.mockrc.ts'];
-export const only = [...CONFIG_FILES, 'mock/**'].map(file =>
+export const sourcePath = [...CONFIG_FILES, 'mock/**'].map(file =>
   slash(join(cwd, file))
 );
 
@@ -23,7 +23,7 @@ require('@babel/register')({
     ],
   ],
   extensions: ['.js', '.ts'],
-  only,
+  only: sourcePath,
   babelrc: false,
   cache: false,
 });

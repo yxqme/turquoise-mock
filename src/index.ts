@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 import chokidar from 'chokidar';
 
 import {
-  only,
+  sourcePath,
   getUserConfig,
   loadDBSchemas,
   loadRoutes,
@@ -75,7 +75,7 @@ export default function boot() {
 
 boot();
 
-const watcher = chokidar.watch(only);
+const watcher = chokidar.watch(sourcePath);
 
 watcher.on('change', path => {
   Object.keys(require.cache).forEach(function(id) {
