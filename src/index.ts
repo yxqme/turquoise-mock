@@ -3,6 +3,7 @@
 import jsonServer from 'json-server';
 import Mock from 'mockjs';
 import { Server } from 'http';
+import { Socket } from 'net';
 import { Request, Response } from 'express';
 import chokidar from 'chokidar';
 
@@ -22,6 +23,7 @@ interface Router {
 }
 
 let server: Server;
+let sockets: Socket[] = [];
 
 // 启动服务
 export default function boot() {
@@ -65,7 +67,13 @@ export default function boot() {
   server = app.listen(userConfig.port, () => {
     console.log('Mock Server is running, port: ' + userConfig.port);
   });
+
+  server.on('connection', socket => {
+    sockets.push(socket);
+  });
 }
+
+boot();
 
 const watcher = chokidar.watch(only);
 
@@ -75,11 +83,16 @@ watcher.on('change', path => {
       delete require.cache[id];
     }
   });
-  if (server) {
-    server.close(() => {
-      boot();
-    });
-  }
-});
 
-boot();
+  sockets.forEach(socket => {
+    if (socket.destroyed === false) {
+      socket.destroy();
+    }
+  });
+
+  sockets = [];
+
+  server.close(() => {
+    boot();
+  });
+});
