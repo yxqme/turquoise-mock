@@ -85,7 +85,9 @@ watcher.on('change', path => {
   });
 
   sockets.forEach(socket => {
-    socket.destroy();
+    if (socket.destroyed === false) {
+      socket.destroy();
+    }
   });
 
   sockets = [];
