@@ -3,7 +3,7 @@ export default {
     {
       'id|+1': 1,
       name: '@cname',
-      age: 2123,
+      age: 211,
       mobile: '@mobile',
       createdAt: '@datetime',
       'status|1': ['enabled', 'disabled'],

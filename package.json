@@ -1,6 +1,6 @@
 {
   "name": "@beacon/mock",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "author": "xiaoqiang.yang",
   "module": "dist/mock.esm.js",
   "license": "MIT",
