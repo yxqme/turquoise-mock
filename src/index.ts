@@ -65,7 +65,7 @@ export default function boot() {
   app.use(router);
 
   server = app.listen(userConfig.port, () => {
-    console.log('Mock Server is running, port: ' + userConfig.port);
+    console.log('Mock Server is running, http://localhost:' + userConfig.port);
   });
 
   server.on('connection', socket => {
