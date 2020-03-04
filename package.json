@@ -1,6 +1,6 @@
 {
   "name": "@turquoise/mock",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "author": "xiaoqiang.yang",
   "module": "dist/mock.esm.js",
   "license": "MIT",
