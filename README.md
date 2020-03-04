@@ -178,7 +178,7 @@ yarn run mock
 
 Based on the previous `schema/api.ts` , here are all the default routes. 
 
-> base of [json-server](https://github.com/typicode/json-server)
+> reference [json-server](https://github.com/typicode/json-server)
 
 ### Plural routes
 
