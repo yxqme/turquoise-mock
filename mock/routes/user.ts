@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 
 export default [
-  // 获取用户信息
   {
     path: '/me',
     method: 'get',
