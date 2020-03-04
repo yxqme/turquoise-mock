@@ -73,7 +73,6 @@ Sample file `routes/user.ts`
 import { Request, Response } from "express";
 
 export default [
-  // 获取用户信息
   {
     path: "/me",
     controller: (req: Request, res: Response): void => {
