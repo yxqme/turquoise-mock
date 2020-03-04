@@ -1,5 +1,5 @@
 {
-  "name": "@beacon/mock",
+  "name": "@turquoise/mock",
   "version": "1.0.11",
   "author": "xiaoqiang.yang",
   "module": "dist/mock.esm.js",
@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "bin": {
-    "mock": "mock.js"
+    "turquoise-mock": "mock.js"
   },
   "files": [
     "dist",
