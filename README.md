@@ -78,8 +78,6 @@ export default [
     controller: (req: Request, res: Response): void => {
       res.json({
         mobile: "@mobile",
-        authorized: true, 
-        withinWhiteList: true, 
         username: "xiaoming",
         role: ["admin", "test"],
       });
