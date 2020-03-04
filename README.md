@@ -35,7 +35,7 @@ yarn add turquoise/mock -D
 
 ## Custom model
 
-Sample file `schema/api.ts`
+Sample file `schema/api.ts`, mock rules can find at [mockjs](http://mockjs.com/)
 
 ```typescript
 export default {
@@ -175,9 +175,11 @@ yarn run mock
 ```
 
 
-## REST API Routes
+## REST API Routes 
 
 Based on the previous `schema/api.ts` , here are all the default routes. 
+
+> base of [json-server](https://github.com/typicode/json-server)
 
 ### Plural routes
 
