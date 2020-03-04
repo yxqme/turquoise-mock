@@ -1,6 +1,6 @@
 {
   "name": "@turquoise/mock",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "author": "xiaoqiang.yang",
   "module": "dist/mock.esm.js",
   "license": "MIT",
@@ -8,6 +8,10 @@
   "typings": "dist/index.d.ts",
   "bin": {
     "turquoise-mock": "mock.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yxqme/turquoise-mock"
   },
   "files": [
     "dist",
