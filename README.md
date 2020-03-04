@@ -12,22 +12,22 @@
 
 ## installation
 
-```
+```shell
 # Use npm
-npm i @ turquoise / mock -D
+npm i @ turquoise/mock -D
 
 # Use the Yarn 
-the Yarn Turquoise @ the Add / mock -D
+yarn add turquoise/mock -D
 ```
 
 ## Usage example
 
-In `package.json`use in
+In `package.json` use in
 
-```
+```js
 {
-   " scripts " : {
-     " mock " : " turquoise-mock "
+   "scripts" : {
+     "mock" : "turquoise-mock"
   }
 }
 ```
@@ -49,20 +49,20 @@ Project file structure that must be followed
 
 Sample file `routes/user.ts`
 
-```
-import { Request , Response } from  " express " ;
+```typescript
+import { Request, Response } from "express";
 
-export  default [
-   // Get user information
+export default [
+  // 获取用户信息
   {
-    path: " / me " ,
-     controller : ( req :  Request , res :  Response ) :  void  => {
-       res . json ({
-        mobile: " @mobile " ,
-        authorized: true , // Requires authorization 
-        withoutWhiteList: true , // Whitelist 
-        username: " xiaoming " ,
-        role: [ " admin " , " test " ],
+    path: "/me",
+    controller: (req: Request, res: Response): void => {
+      res.json({
+        mobile: "@mobile",
+        authorized: true, // 需要授权
+        withinWhiteList: true, // 白名单
+        username: "xiaoming",
+        role: ["admin", "test"],
       });
     }
   }
@@ -73,16 +73,16 @@ export  default [
 
 Sample file `schema/api.ts`
 
-```
-export  default {
-   " user | 100 " : [
+```typescript
+export default {
+  "user|100": [
     {
-      " id | +1 " : 1 ,
-      name: " @cname " ,
-      age: 4 ,
-      mobile: " @mobile " ,
-      createdAt: " @datetime " ,
-       " status | 1 " : [ " enabled " , " disabled " ]
+      "id|+1": 1,
+      name: "@cname",
+      age: 4,
+      mobile: "@mobile",
+      createdAt: "@datetime",
+      "status|1": ["enabled", "disabled"]
     }
   ]
 };
@@ -92,18 +92,18 @@ export  default {
 
 Sample file `random/ext.ts`
 
-```
-import  Mock  from  " mockjs " ;
+```typescript
+import Mock from "mockjs";
 
-export  default {
-  mobile () :  string {
-     return  Mock . mock ( / ^ 1 (9 | 3 | 4 | 5 | 7 | 8) [ 0-9 ] {9} $ / );
+export default {
+  mobile(): string {
+    return Mock.mock(/^1(9|3|4|5|7|8)[0-9]{9}$/);
   },
-  lon () :  number {
-     return  Mock . Random . float ( 121.140308 , 121.82558 , 7 , 8 );
+  lon(): number {
+    return Mock.Random.float(121.140308, 121.82558, 7, 8);
   },
-  lat () :  number {
-     return  Mock . Random . float ( 30.853426 , 31.363719 , 7 , 6 );
+  lat(): number {
+    return Mock.Random.float(30.853426, 31.363719, 7, 6);
   }
 };
 ```
@@ -112,20 +112,20 @@ export  default {
 
 Sample file `middlewares/query.ts`
 
-```
-import { Request , Response , NextFunction } from  " express " ;
+```typescript
+import { Request, Response, NextFunction } from "express";
 
-Module1 . Exports  = [
-   function ( REQ :  the Request , RES :  the Response , Next :  NextFunction ) :  void {
-     IF ( REQ . Method  ===  " the PUT " ) {
-       REQ . Method  =  " the PATCH " ;
+module.exports = [
+  function(req: Request, res: Response, next: NextFunction): void {
+    if (req.method === "PUT") {
+      req.method = "PATCH";
     }
 
-    console . log ( " before hook " );
+    console.log("before hook");
 
-    next ();
+    next();
 
-    console . log ( " after hook " );
+    console.log("after hook");
   }
 ];
 ```
@@ -141,9 +141,9 @@ Read the project root directory by default `.mockrc.ts`
 | rewriter | object   | {"/ api / *": "/ $ 1"} | Rewrite routing                    |
 | render   | function | -                      | `json-server`In the `render`method |
 
-```
-export  default {
-   // Change the default port 
-  port: 3002 
+```typescript
+export default {
+  // change port
+  port: 3002
 }
 ```
