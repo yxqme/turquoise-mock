@@ -20,6 +20,7 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build && cp -r src/public dist/public",
+    "docs": "dumi dev",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "tsdx build && cp -r src/public dist/public",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@types/jest": "^25.1.2",
+    "dumi": "^1.0.0",
     "husky": "^4.2.3",
     "tsdx": "^0.12.3",
     "tslib": "^1.10.0",
