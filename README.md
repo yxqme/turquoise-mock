@@ -1,150 +1,149 @@
-# @turquoise/mock
+# @ turquoise/mock
 
-- [安装](#安装)
-- [使用示例](#使用示例)
-- [文件结构](#文件结构)
-- [自定义路由](#自定义路由)
-- [自定义模型](#自定义模型)
-- [扩展随机生成器](#扩展随机生成器)
-- [中间件](#中间件)
-- [启动配置](#启动配置)
+- [@ turquoise/mock](#turquoisemock)
+  - [installation](#installation)
+  - [Usage example](#usage-example)
+  - [File structure](#file-structure)
+  - [Custom routing](#custom-routing)
+  - [Custom model](#custom-model)
+  - [Extended random generator](#extended-random-generator)
+  - [Middleware](#middleware)
+  - [Launch configuration](#launch-configuration)
 
-## 安装
+## installation
 
-```bash
-# 使用 npm
-npm i @turquoise/mock -D
+```
+# Use npm
+npm i @ turquoise / mock -D
 
-# 使用 yarn
-yarn add @turquoise/mock -D
+# Use the Yarn 
+the Yarn Turquoise @ the Add / mock -D
 ```
 
-## 使用示例
+## Usage example
 
-在 `package.json` 里使用
+In `package.json`use in
 
-```json
+```
 {
-  "scripts": {
-    "mock": "turquoise-mock"
+   " scripts " : {
+     " mock " : " turquoise-mock "
   }
 }
 ```
 
-## 文件结构
+## File structure
 
-必须遵循的项目文件结构
+Project file structure that must be followed
 
-```text
+```
 |-- mock
-    |-- routes // 路由，基于express，自己写控制器
-    |-- schemas // 模型, json 格式快速定义数据模型
-    |-- random // 扩展Mockjs生成器
-    |-- middlewares // express 中间件
-|-- .mockrc.ts // 配置
+    |-- routes // custom routes
+    |-- schemas // schamas
+    |-- random // extend mockjs Generator
+    |-- middlewares // express middlewares
+|-- .mockrc.ts // configuration
 ```
 
+## Custom routing
 
-## 自定义路由
+Sample file `routes/user.ts`
 
-示例文件 `routes/user.ts`
+```
+import { Request , Response } from  " express " ;
 
-```typescript
-import { Request, Response } from "express";
-
-export default [
-  // 获取用户信息
+export  default [
+   // Get user information
   {
-    path: "/me",
-    controller: (req: Request, res: Response): void => {
-      res.json({
-        mobile: "@mobile",
-        authorized: true, // 需要授权
-        withinWhiteList: true, // 白名单
-        username: "xiaoming",
-        role: ["admin", "test"],
+    path: " / me " ,
+     controller : ( req :  Request , res :  Response ) :  void  => {
+       res . json ({
+        mobile: " @mobile " ,
+        authorized: true , // Requires authorization 
+        withoutWhiteList: true , // Whitelist 
+        username: " xiaoming " ,
+        role: [ " admin " , " test " ],
       });
     }
   }
 ];
 ```
 
-## 自定义模型
+## Custom model
 
-示例文件 `schema/api.ts`
+Sample file `schema/api.ts`
 
-```typescript
-export default {
-  "user|100": [
+```
+export  default {
+   " user | 100 " : [
     {
-      "id|+1": 1,
-      name: "@cname",
-      age: 4,
-      mobile: "@mobile",
-      createdAt: "@datetime",
-      "status|1": ["enabled", "disabled"]
+      " id | +1 " : 1 ,
+      name: " @cname " ,
+      age: 4 ,
+      mobile: " @mobile " ,
+      createdAt: " @datetime " ,
+       " status | 1 " : [ " enabled " , " disabled " ]
     }
   ]
 };
 ```
 
-## 扩展随机生成器
+## Extended random generator
 
-示例文件 `random/ext.ts`
+Sample file `random/ext.ts`
 
-```typescript
-import Mock from "mockjs";
+```
+import  Mock  from  " mockjs " ;
 
-export default {
-  mobile(): string {
-    return Mock.mock(/^1(9|3|4|5|7|8)[0-9]{9}$/);
+export  default {
+  mobile () :  string {
+     return  Mock . mock ( / ^ 1 (9 | 3 | 4 | 5 | 7 | 8) [ 0-9 ] {9} $ / );
   },
-  lon(): number {
-    return Mock.Random.float(121.140308, 121.82558, 7, 8);
+  lon () :  number {
+     return  Mock . Random . float ( 121.140308 , 121.82558 , 7 , 8 );
   },
-  lat(): number {
-    return Mock.Random.float(30.853426, 31.363719, 7, 6);
+  lat () :  number {
+     return  Mock . Random . float ( 30.853426 , 31.363719 , 7 , 6 );
   }
 };
 ```
 
-## 中间件
+## Middleware
 
-示例文件 `middlewares/query.ts`
+Sample file `middlewares/query.ts`
 
-```typescript
-import { Request, Response, NextFunction } from "express";
+```
+import { Request , Response , NextFunction } from  " express " ;
 
-module.exports = [
-  function(req: Request, res: Response, next: NextFunction): void {
-    if (req.method === "PUT") {
-      req.method = "PATCH";
+Module1 . Exports  = [
+   function ( REQ :  the Request , RES :  the Response , Next :  NextFunction ) :  void {
+     IF ( REQ . Method  ===  " the PUT " ) {
+       REQ . Method  =  " the PATCH " ;
     }
 
-    console.log("before hook");
+    console . log ( " before hook " );
 
-    next();
+    next ();
 
-    console.log("after hook");
+    console . log ( " after hook " );
   }
 ];
 ```
 
-## 启动配置
+## Launch configuration
 
-默认读取项目根目录的 `.mockrc.ts`
+Read the project root directory by default `.mockrc.ts`
 
-| 字段     | 类型     | 默认值                | 描述                             |
-| :------- | :------- | :-------------------- | :------------------------------- |
-| port     | number   | 3000                  | 服务端口                         |
-| delay    | number   | 0                     | 模拟网络延迟                     |
-| rewriter | object   | { "/api/\*": "/\$1" } | 重写路由                         |
-| render   | function | -                     | `json-server` 里的 `render` 方法 |
+| Field    | Types of | Defaults               | description                        |
+| -------- | -------- | ---------------------- | ---------------------------------- |
+| port     | number   | 3000                   | Service port                       |
+| delay    | number   | 0                      | Simulated network latency          |
+| rewriter | object   | {"/ api / *": "/ $ 1"} | Rewrite routing                    |
+| render   | function | -                      | `json-server`In the `render`method |
 
-
-```typescript
-export default {
-  // 更改默认端口
-  port: 3002
+```
+export  default {
+   // Change the default port 
+  port: 3002 
 }
 ```
