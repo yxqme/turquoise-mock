@@ -2,13 +2,26 @@
 
 - [@ turquoise/mock](#turquoisemock)
   - [installation](#installation)
-  - [Usage example](#usage-example)
+  - [Custom model](#custom-model)
   - [File structure](#file-structure)
   - [Custom routing](#custom-routing)
-  - [Custom model](#custom-model)
   - [Extended random generator](#extended-random-generator)
   - [Middleware](#middleware)
   - [Launch configuration](#launch-configuration)
+  - [Usage example](#usage-example)
+  - [start a mock server](#start-a-mock-server)
+  - [REST API Routes](#rest-api-routes)
+    - [Plural routes](#plural-routes)
+    - [Singular routes](#singular-routes)
+    - [Filter](#filter)
+    - [Paginate](#paginate)
+    - [Sort](#sort)
+    - [Slice](#slice)
+    - [Operators](#operators)
+    - [Full-text search](#full-text-search)
+    - [Relationships](#relationships)
+    - [Database](#database)
+    - [Homepage](#homepage)
 
 ## installation
 
@@ -20,16 +33,23 @@ npm i @ turquoise/mock -D
 yarn add turquoise/mock -D
 ```
 
-## Usage example
+## Custom model
 
-In `package.json` use in
+Sample file `schema/api.ts`
 
-```js
-{
-   "scripts" : {
-     "mock" : "turquoise-mock"
-  }
-}
+```typescript
+export default {
+  "user|100": [
+    {
+      "id|+1": 1,
+      name: "@cname",
+      age: 4,
+      mobile: "@mobile",
+      createdAt: "@datetime",
+      "status|1": ["enabled", "disabled"]
+    }
+  ]
+};
 ```
 
 ## File structure
@@ -69,24 +89,7 @@ export default [
 ];
 ```
 
-## Custom model
 
-Sample file `schema/api.ts`
-
-```typescript
-export default {
-  "user|100": [
-    {
-      "id|+1": 1,
-      name: "@cname",
-      age: 4,
-      mobile: "@mobile",
-      createdAt: "@datetime",
-      "status|1": ["enabled", "disabled"]
-    }
-  ]
-};
-```
 
 ## Extended random generator
 
@@ -146,4 +149,167 @@ export default {
   // change port
   port: 3002
 }
+```
+
+
+## Usage example
+
+In `package.json` use in
+
+```js
+{
+   "scripts" : {
+     "mock" : "turquoise-mock"
+  }
+}
+```
+
+## start a mock server
+
+```shell
+# Use npm
+npm run mock
+
+# Use the Yarn 
+yarn run mock
+```
+
+
+## REST API Routes
+
+Based on the previous `schema/api.ts` , here are all the default routes. 
+
+### Plural routes
+
+```
+GET    /users
+GET    /users/1
+POST   /users
+PUT    /users/1
+PATCH  /users/1
+DELETE /users/1
+```
+
+### Singular routes
+
+```
+GET    /profile
+POST   /profile
+PUT    /profile
+PATCH  /profile
+```
+
+### Filter
+
+Use `.` to access deep properties
+
+```
+GET /users?title=json-server&author=typicode
+GET /users?id=1&id=2
+GET /comments?author.name=typicode
+```
+
+### Paginate
+
+Use `_page` and optionally `_limit` to paginate returned data.
+
+In the `Link` header you'll get `first`, `prev`, `next` and `last` links.
+
+```
+GET /users?_page=7
+GET /users?_page=7&_limit=20
+```
+
+*10 items are returned by default*
+
+### Sort
+
+Add `_sort` and `_order` (ascending order by default)
+
+```
+GET /users?_sort=views&_order=asc
+GET /users/1/comments?_sort=votes&_order=asc
+```
+
+For multiple fields, use the following format:
+
+```
+GET /users?_sort=user,views&_order=desc,asc
+```
+
+### Slice
+
+Add `_start` and `_end` or `_limit` (an `X-Total-Count` header is included in the response)
+
+```
+GET /users?_start=20&_end=30
+GET /users/1/comments?_start=20&_end=30
+GET /users/1/comments?_start=20&_limit=10
+```
+
+*Works exactly as [Array.slice](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/slice) (i.e. `_start` is inclusive and `_end` exclusive)*
+
+### Operators
+
+Add `_gte` or `_lte` for getting a range
+
+```
+GET /users?views_gte=10&views_lte=20
+```
+
+Add `_ne` to exclude a value
+
+```
+GET /users?id_ne=1
+```
+
+Add `_like` to filter (RegExp supported)
+
+```
+GET /users?title_like=server
+```
+
+### Full-text search
+
+Add `q`
+
+```
+GET /users?q=internet
+```
+
+### Relationships
+
+To include children resources, add `_embed`
+
+```
+GET /users?_embed=comments
+GET /users/1?_embed=comments
+```
+
+To include parent resource, add `_expand`
+
+```
+GET /comments?_expand=post
+GET /comments/1?_expand=post
+```
+
+To get or create nested resources
+
+```
+GET  /users/1/comments
+POST /users/1/comments
+```
+
+### Database
+
+```
+GET /db
+```
+
+### Homepage
+
+Returns default index file or serves `./public` directory
+
+```
+GET /
 ```
