@@ -21,6 +21,7 @@
     "start": "tsdx watch",
     "build": "tsdx build && cp -r src/public dist/public",
     "docs": "dumi dev",
+    "docs:build": "dumi build",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "tsdx build && cp -r src/public dist/public",
