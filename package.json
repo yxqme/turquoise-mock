@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "@types/jest": "^25.1.2",
-    "dumi": "^1.0.0",
     "husky": "^4.2.3",
     "tsdx": "^0.12.3",
     "tslib": "^1.10.0",
