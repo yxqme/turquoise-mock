@@ -1,6 +1,6 @@
 {
   "name": "@turquoise/mock",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "author": "xiaoqiang.yang",
   "module": "dist/mock.esm.js",
   "license": "MIT",
@@ -20,12 +20,9 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build && cp -r src/public dist/public",
-    "docs": "dumi dev",
-    "docs:build": "dumi build",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build && cp -r src/public dist/public",
-    "mock": "node ./dist/index.js"
+    "mock": "node ./mock.js"
   },
   "peerDependencies": {},
   "husky": {

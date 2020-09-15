@@ -1,2 +1,6 @@
 #!/usr/bin/env node
-require('./dist/index.js');
+
+const { boot, watcher } = require('./dist/index.js');
+
+boot();
+watcher();

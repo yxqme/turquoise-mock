@@ -1,14 +1,14 @@
-import { Request, Response } from 'express';
+import { Router } from '../../src';
 
 export default [
   {
     path: '/me',
     method: 'get',
-    controller: (req: Request, res: Response): void => {
+    controller: (req, res): void => {
       res.json({
         mobile: 'xxx',
-        role: ['admin', 'test'],
+        role: ['admin', 'test', 'superAdmin'],
       });
     },
   },
-];
+] as Router[];

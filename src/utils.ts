@@ -22,6 +22,7 @@ require('@babel/register')({
       },
     ],
   ],
+  plugins: [['@babel/plugin-proposal-class-properties', { loose: true }]],
   extensions: ['.js', '.ts'],
   only: sourcePath,
   babelrc: false,
@@ -141,14 +142,14 @@ export function loadRandomExtend(pathname: string) {
 }
 
 // 加载中间件
-export function loadMiddlewares(pathname: string) {
-  let middlewares: any[] = [];
+export function loadMiddleware(pathname: string) {
+  let middleware: any[] = [];
   loadFiles(pathname, content => {
     if (Array.isArray(content)) {
-      middlewares = middlewares.concat(content);
+      middleware = middleware.concat(content);
     } else {
-      throw new Error('middlewares config format error');
+      throw new Error('middleware config format error');
     }
   });
-  return middlewares;
+  return middleware;
 }

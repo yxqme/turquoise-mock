@@ -13,10 +13,10 @@ import {
   loadDBSchemas,
   loadRoutes,
   loadRandomExtend,
-  loadMiddlewares,
+  loadMiddleware,
 } from './utils';
 
-interface Router {
+export interface Router {
   path: string;
   method?: 'get' | 'post' | 'patch' | 'put' | 'delete';
   controller: (req: Request, res: Response) => void;
@@ -26,14 +26,14 @@ let server: Server;
 let sockets: Socket[] = [];
 
 // 启动服务
-export default function boot() {
+export function boot() {
   const userConfig = getUserConfig();
 
-  const [DBSchemas, routes, randomExtend, middlewares] = [
+  const [DBSchemas, routes, randomExtend, middleware] = [
     loadDBSchemas('mock/schemas'),
     loadRoutes('mock/routes'),
     loadRandomExtend('mock/random'),
-    loadMiddlewares('mock/middlewares'),
+    loadMiddleware('mock/middleware'),
   ];
 
   if ((Mock.Random as any).extend) {
@@ -42,15 +42,15 @@ export default function boot() {
 
   const app = jsonServer.create();
   const router: any = jsonServer.router(Mock.mock(DBSchemas));
-  const jsonServerMiddlewares = jsonServer.defaults({
+  const jsonServerMiddleware = jsonServer.defaults({
     static: __dirname + '/public',
   });
 
-  app.use(jsonServerMiddlewares);
+  app.use(jsonServerMiddleware);
   app.use(jsonServer.rewriter(userConfig.rewriter));
   app.use(jsonServer.bodyParser);
 
-  middlewares.forEach((middleware: any) => {
+  middleware.forEach((middleware: any) => {
     app.use(middleware);
   });
 
@@ -73,26 +73,26 @@ export default function boot() {
   });
 }
 
-boot();
+export function watcher() {
+  const watcher = chokidar.watch(sourcePath);
 
-const watcher = chokidar.watch(sourcePath);
+  watcher.on('change', path => {
+    Object.keys(require.cache).forEach(function(id) {
+      if (path === id) {
+        delete require.cache[id];
+      }
+    });
 
-watcher.on('change', path => {
-  Object.keys(require.cache).forEach(function(id) {
-    if (path === id) {
-      delete require.cache[id];
-    }
+    sockets.forEach(socket => {
+      if (socket.destroyed === false) {
+        socket.destroy();
+      }
+    });
+
+    sockets = [];
+
+    server.close(() => {
+      boot();
+    });
   });
-
-  sockets.forEach(socket => {
-    if (socket.destroyed === false) {
-      socket.destroy();
-    }
-  });
-
-  sockets = [];
-
-  server.close(() => {
-    boot();
-  });
-});
+}
